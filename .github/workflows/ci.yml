@@ -18,6 +18,8 @@ jobs:
         run: swift build
       - name: Unit tests
         run: swift test
+      - name: Explore raw.pixls.us (temporary)
+        run: python3 scripts/explore-rpu.py
       - name: Fetch CC0 sample DNGs
         run: python3 scripts/fetch-samples.py testdata/downloaded
       - name: Integration test
