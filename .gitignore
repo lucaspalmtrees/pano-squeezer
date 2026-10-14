@@ -1,0 +1,22 @@
+# Swift / SPM
+.build/
+.swiftpm/
+*.xcodeproj/
+xcuserdata/
+DerivedData/
+Package.resolved
+
+# Build output
+dist/
+Resources/AppIcon.icns
+Resources/AppIcon.iconset/
+
+# Test data: NEVER commit own photos (camera serial numbers, GPS!)
+testdata/local/
+testdata/downloaded/
+*.DNG
+*.dng
+
+# macOS
+.DS_Store
+._*
