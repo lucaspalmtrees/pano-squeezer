@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here.
 
-## [0.1.0] – unreleased
+## [0.1.0] – 2026-10-14
 
 ### Added
 - Lossless desqueeze of anamorphic DNGs by setting the `DefaultScale` tag in the raw IFD (append strategy, only one 4-byte pointer changed).
