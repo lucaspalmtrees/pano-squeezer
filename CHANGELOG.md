@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.1] – 2026-10-14
+
+### Fixed
+- "Save to → Choose…" did not open the folder picker; the selection jumped back to "Same folder".
+
 ## [0.1.0] – 2026-10-14
 
 ### Added
