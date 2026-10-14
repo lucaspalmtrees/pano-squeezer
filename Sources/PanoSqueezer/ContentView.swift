@@ -177,18 +177,13 @@ struct ContentView: View {
             GridRow {
                 Text("Save to")
                 VStack(alignment: .leading, spacing: 4) {
-                    Picker("Save to", selection: $useCustomDestination) {
+                    Picker("Save to", selection: destinationSelection) {
                         Text("Same folder").tag(false)
                         Text("Choose…").tag(true)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
                     .fixedSize()
-                    .onChange(of: useCustomDestination) { _, newValue in
-                        if newValue && customDestinationPath.isEmpty && !chooseDestination() {
-                            useCustomDestination = false
-                        }
-                    }
                     Text(destinationDescription)
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -201,6 +196,24 @@ struct ContentView: View {
                 }
             }
         }
+    }
+
+    /// "Choose…" only becomes selected once a folder has actually been chosen.
+    private var destinationSelection: Binding<Bool> {
+        Binding(
+            get: { useCustomDestination && !customDestinationPath.isEmpty },
+            set: { wantsCustom in
+                guard wantsCustom else { useCustomDestination = false; return }
+                if FileManager.default.fileExists(atPath: customDestinationPath) {
+                    useCustomDestination = true  // remembered folder still exists
+                    return
+                }
+                // Open the panel after the segmented control has finished handling the click:
+                // a modal panel started while the click is still being processed closes immediately.
+                DispatchQueue.main.async {
+                    if chooseDestination() { useCustomDestination = true }
+                }
+            })
     }
 
     private var destinationDescription: String {
