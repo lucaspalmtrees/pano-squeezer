@@ -22,11 +22,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: testdata/downloaded
-          key: rpu-cc0-samples-v1
+          key: rpu-cc0-samples-${{ hashFiles('scripts/fetch-samples.py') }}
       - name: Fetch CC0 sample DNGs
         run: python3 scripts/fetch-samples.py testdata/downloaded
       - name: Integration test
-        run: scripts/integration-test.sh
+        run: scripts/integration-test.sh --require-real
 
   macos:
     name: App build + tests (macOS)
@@ -47,11 +47,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: testdata/downloaded
-          key: rpu-cc0-samples-v1
+          key: rpu-cc0-samples-${{ hashFiles('scripts/fetch-samples.py') }}
       - name: Fetch CC0 sample DNGs
         run: python3 scripts/fetch-samples.py testdata/downloaded
       - name: Integration test
-        run: scripts/integration-test.sh
+        run: scripts/integration-test.sh --require-real
       - name: Build app bundle
         run: scripts/build-app.sh
       - name: Upload app

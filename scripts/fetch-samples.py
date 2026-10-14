@@ -58,7 +58,9 @@ def main():
             matches = [r for r in rows if name in json.dumps(r, ensure_ascii=False)]
             text = json.dumps(matches, ensure_ascii=False)
             print(f"{make} {model} {name}: {text[:400]}")
-            if not matches or "cc0" not in text.lower():
+            # The license column is an HTML link; CC0 appears as ".../publicdomain/zero/..." or "CC0".
+            is_cc0 = "publicdomain/zero" in text or "cc0" in text.lower()
+            if not matches or not is_cc0:
                 print(f"  skipped: license is not CC0 (or unknown)")
                 continue
             dest = os.path.join(target, f"{make}-{model}-{name}".replace(" ", "_"))
