@@ -3,6 +3,12 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  # Manual start (Actions → Release → Run workflow): creates the tag and the release.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version without v, e.g. 0.1.0"
+        required: true
 
 permissions:
   contents: write
@@ -12,6 +18,7 @@ env:
   #   DEVELOPER_ID_CERT_P12 (base64), DEVELOPER_ID_CERT_PASSWORD, DEVELOPER_ID (e.g. "Developer ID Application: Name (TEAMID)"),
   #   APPLE_ID, APPLE_TEAM_ID, APPLE_APP_PASSWORD (app-specific password)
   NOTARIZE: 'false'
+  TAG: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref_name }}
 
 jobs:
   release:
@@ -41,11 +48,11 @@ jobs:
       - name: Build app
         env:
           DEVELOPER_ID: ${{ env.NOTARIZE == 'true' && secrets.DEVELOPER_ID || '' }}
-        run: scripts/build-app.sh "${GITHUB_REF_NAME#v}"
+        run: scripts/build-app.sh "${TAG#v}"
 
       - name: Package (zip + dmg)
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${TAG#v}"
           ditto -c -k --keepParent dist/pano-squeezer.app "dist/pano-squeezer-$VERSION.zip"
           mkdir -p dist/dmg && cp -R dist/pano-squeezer.app dist/dmg/ && ln -s /Applications dist/dmg/Applications
           hdiutil create -volname "pano-squeezer" -srcfolder dist/dmg -ov -format UDZO "dist/pano-squeezer-$VERSION.dmg"
@@ -57,14 +64,14 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${TAG#v}"
           xcrun notarytool submit "dist/pano-squeezer-$VERSION.dmg" --apple-id "$APPLE_ID" \
             --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait
           xcrun stapler staple "dist/pano-squeezer-$VERSION.dmg"
 
       - name: Release notes from CHANGELOG.md
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${TAG#v}"
           awk -v v="$VERSION" '
             $0 ~ "^## \\[?" v "\\]?" { found=1; next }
             found && /^## / { exit }
@@ -77,6 +84,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          gh release create "$GITHUB_REF_NAME" --title "pano-squeezer $VERSION" --notes-file dist/notes.md \
+          VERSION="${TAG#v}"
+          gh release create "$TAG" --target "$GITHUB_SHA" --title "pano-squeezer $VERSION" --notes-file dist/notes.md \
             "dist/pano-squeezer-$VERSION.zip" "dist/pano-squeezer-$VERSION.dmg"
