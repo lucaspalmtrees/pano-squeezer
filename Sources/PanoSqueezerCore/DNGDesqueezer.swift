@@ -8,7 +8,7 @@ public struct DesqueezeOutcome: Sendable {
     public var appendedBytes: UInt64
 }
 
-/// Writes a desqueezed copy of a DNG using the append strategy (SPEC 4.3):
+/// Writes a desqueezed copy of a DNG using the append strategy:
 ///  1. clone the original to `.<name>.partial`
 ///  2. append the DefaultScale value and a new copy of the raw IFD at the end of the file
 ///  3. redirect the single 4-byte pointer that pointed to the old raw IFD to the new one

@@ -1,6 +1,6 @@
 import Foundation
 
-/// Mandatory check after every write (SPEC 4.5).
+/// Mandatory check after every write.
 public enum OutputVerifier {
     static let chunkSize = 4 * 1024 * 1024
 
