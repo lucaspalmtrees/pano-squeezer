@@ -67,7 +67,7 @@ scripts/build-app.sh       # → dist/pano-squeezer.app (universal, ad-hoc signe
 
 ## Support
 
-pano-squeezer is free and open source. If it saves you time, you can support it via the *Sponsor* button on GitHub.
+pano-squeezer is free and open source. If it saves you time, you can [buy me a coffee on Ko-fi](https://ko-fi.com/K6C028RW87) ☕
 
 ## License
 

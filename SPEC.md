@@ -16,7 +16,7 @@
 | App-Name | `pano-squeezer` |
 | Bundle-ID | `com.lucarieser.pano-squeezer` |
 | GitHub-Benutzer / Repo-Name | `lucaspalmtrees` / `pano-squeezer` (bereits angelegt, aktuell privat) |
-| Spendenlink | `TODO` (Ko-fi, Buy Me a Coffee oder GitHub Sponsors) |
+| Spendenlink | `https://ko-fi.com/K6C028RW87` (Ko-fi) |
 | UI-Sprache v1 | Englisch (Deutsch als spätere Lokalisierung) |
 | Lizenz | MIT |
 
